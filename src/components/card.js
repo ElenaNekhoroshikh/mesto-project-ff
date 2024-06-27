@@ -1,16 +1,8 @@
-import { initialCards } from './cards.js';
-import { openImagePopup, popupAddNewCard } from '../index.js';
-import { closePopup } from './modal.js';
-export { addCard, deleteCard, addLike, addCardToCardsArray };
-
-const cardsContainer = document.querySelector('.places__list');
-const cardTemplate = document.querySelector('#card-template').content;
-export const newPlace = document.forms['new-place'];
-const placeName = newPlace.querySelector('.popup__input_type_card-name');
-const placeLink = newPlace.querySelector('.popup__input_type_url');
+import { cardTemplate } from '../index.js';
+export { deleteCard, addLike, createCard };
 
 // @todo: Функция создания карточки
-function createCard (place, deleteCard, addLike) {
+function createCard (place, deleteCard, addLike, openPopapImg) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
@@ -25,7 +17,7 @@ function createCard (place, deleteCard, addLike) {
   likeButton.addEventListener('click', addLike);
 
   cardImage.addEventListener('click', function () {
-    openImagePopup(place.link, place.name);
+    openPopapImg(place.link, place.name);
   });
 
 return cardElement;
@@ -44,22 +36,3 @@ function addLike(evt) {
   cardToLike.classList.toggle('card__like-button_is-active');
 }
 
-function addCard() {
-  initialCards.forEach(function (place) {
-    const card = createCard(place, deleteCard, addLike);
-    cardsContainer.appendChild(card);
-  });
-}
-
-//Добавление новой карточки 
-function addCardToCardsArray(evt) {
-  evt.preventDefault();
-  const newCard = {
-    name: placeName.value,
-    link: placeLink.value,
-  };
-  const newPlaceCard = createCard(newCard, deleteCard, addLike);
-  cardsContainer.insertBefore(newPlaceCard, cardsContainer.firstChild);
-  newPlace.reset();
-  closePopup(popupAddNewCard);
-}

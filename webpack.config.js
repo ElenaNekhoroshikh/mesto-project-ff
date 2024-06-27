@@ -12,7 +12,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
-        publicPath: ''
+        publicPath: '',
+    /*assetModuleFilename: 'images/[hash][ext][query]'*/
   },
     mode: 'development', //добавили режим разработчика
       // Настройки для локального сервера разработки
@@ -32,8 +33,18 @@ module.exports = {
       },
       {
         // регулярное выражение, которое ищет все файлы с такими расширениями
-    test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+    test: /\.(png|svg|jpg|jpeg|gif)$/,
     type: 'asset/resource',
+    generator: {
+      filename: 'images/[name].[hash][ext]',
+    }
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash][ext]'
+        }
       },
       {test: /\.css$/,
       use: [MiniCssExtractPlugin.loader, {

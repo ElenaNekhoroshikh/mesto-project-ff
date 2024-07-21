@@ -234,3 +234,6 @@ popups.forEach((popup) => {
   };
 
   enableValidation(configValidation);
+
+  // Функция для установки текущего года в элемент с id 'year'
+document.getElementById('year').textContent = new Date().getFullYear();

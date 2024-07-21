@@ -1,38 +1,46 @@
 import { cardTemplate } from '../index.js';
-export { deleteCard, addLike, createCard };
+export { createCard };
 
 // @todo: Функция создания карточки
-function createCard (place, deleteCard, addLike, openPopapImg) {
+const createCard = ({
+  userId, 
+  dataCard, 
+  deleteCard, 
+  addLike, 
+  openImagePopup}) => {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
-  const cardTitle = cardElement.querySelector('.card__title');
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const likeButton = cardElement.querySelector('.card__like-button');
+  const cardTitle = cardElement.querySelector('.card__title');
+  const countLikes = cardElement.querySelector('.card__counter-like');
 
-  cardTitle.textContent = place.name;
-  cardImage.src = place.link;
-  cardImage.alt = 'Фотография с места - ' + place.name;
+  cardTitle.textContent = dataCard.name;
+  cardImage.src = dataCard.link;
+  cardImage.alt = 'Фотография с места - ' + dataCard.name;
+  cardElement.id = dataCard['_id'];
+  countLikes.textContent = dataCard.likes.length;
 
-  deleteButton.addEventListener('click', deleteCard);
-  likeButton.addEventListener('click', addLike);
+  const isLiked = dataCard.likes.some((like) => like._id === userId);
+  if (isLiked) {
+    likeButton.classList.add('card__like-button_is-active');
+  }
 
-  cardImage.addEventListener('click', function () {
-    openPopapImg(place.link, place.name);
+  if (dataCard.owner._id === userId) {
+    deleteButton.addEventListener('click', (evt) => {
+      deleteCard(dataCard._id);
+    });
+  } else {
+    deleteButton.remove();
+  }
+
+  likeButton.addEventListener('click', (evt) => {
+    addLike(evt, dataCard._id, countLikes);
+  });
+
+  cardImage.addEventListener('click', () => {
+    openImagePopup(dataCard.link, dataCard.name);
   });
 
 return cardElement;
-}
-
-// @todo: Функция удаления карточки
-function deleteCard(evt) {
-  const delcard = evt.target.closest('.places__item');
-  delcard.remove();
-}
-
-// Функция лайка
-function addLike(evt) {
-  const currentCard = evt.target.closest('.card');
-  const cardToLike = currentCard.querySelector('.card__like-button');
-  cardToLike.classList.toggle('card__like-button_is-active');
-}
-
+};

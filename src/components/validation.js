@@ -1,5 +1,7 @@
 export { enableValidation, clearValidation }
 
+
+// Показать ошибку
 const showInputError = (formElement, inputElement, errorMessage, configValidation) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
   inputElement.classList.add(configValidation.inputErrorClass);
@@ -11,6 +13,7 @@ const showInputError = (formElement, inputElement, errorMessage, configValidatio
   errorElement.classList.add(configValidation.errorClass);
 };
 
+// Скрыть ошибку
 const hideInputError = (formElement, inputElement, configValidation) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
   inputElement.classList.remove(configValidation.inputErrorClass);
@@ -18,6 +21,7 @@ const hideInputError = (formElement, inputElement, configValidation) => {
   errorElement.textContent = '';
 };
 
+// Валидация формы
 const checkInputValidity = (formElement, inputElement, configValidation) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -40,13 +44,13 @@ const hasInvalidInput = (inputList) => {
   
   const toggleButtonState = (inputList, buttonElement, configValidation) => {
     if (hasInvalidInput(inputList)) {
-  buttonElement.classList.add(configValidation.inactiveButtonClass)
+  buttonElement.classList.add(configValidation.inactiveButtonClass);
   buttonElement.setAttribute('disabled', true);
     } else {
-  buttonElement.classList.remove(configValidation.inactiveButtonClass)
+  buttonElement.classList.remove(configValidation.inactiveButtonClass);
   buttonElement.removeAttribute('disabled', false);
     }
-  }
+  };
 
 const setEventListeners = (formElement, configValidation) => {
   const inputList = Array.from(formElement.querySelectorAll(configValidation.inputSelector));
@@ -70,35 +74,22 @@ const setEventListeners = (formElement, configValidation) => {
     });
   };
 
-  const clearValidation = (profileForm, newPlaceForm, configValidation) => {
-    const profileListErrors = profileForm.querySelectorAll(configValidation.errorVisible);
-    const profileButtonInactive = profileForm.querySelector(configValidation.submitButtonSelector);
-    const profileInputSelectors = profileForm.querySelectorAll(configValidation.inputErrorVisible)
-    const newPlaseListErrors = newPlaceForm.querySelectorAll(configValidation.errorVisible);
-    const newPlaceButton = newPlaceForm.querySelector(configValidation.submitButtonSelector);
-    const newPlaceInputSelectors = newPlaceForm.querySelectorAll(configValidation.inputErrorVisible);
-    const newPlacesItems = newPlaceForm.querySelectorAll(configValidation.inputSelector);
- 
-    profileListErrors.forEach ((profileListError) => {
-      profileListError.textContent = ''
-    })
-    profileInputSelectors.forEach((profileInputSelector) => {
-      profileInputSelector.classList.remove(configValidation.inputErrorClass);
-    })
+  // Очистка валидации
+  const clearValidation = (formElement, configValidation) => {
+    const inputList = Array.from(
+      formElement.querySelectorAll(configValidation.inputSelector)
+    );
+    const buttonElement = formElement.querySelector(
+      configValidation.submitButtonSelector
+    );
 
-    newPlaseListErrors.forEach((newPlaseListError) => {
-      newPlaseListError.textContent = ''
-    })
-    newPlaceInputSelectors.forEach((newPlaceInputSelector) => {
-      newPlaceInputSelector.classList.remove(configValidation.inputErrorClass);
-    })
+    inputList.textContent = '';
 
-    newPlacesItems.forEach((newPlacesItem) => {
-      newPlacesItem.value = ''
-    })
-  
-    profileButtonInactive.classList.remove(configValidation.inactiveButtonClass)
-    profileButtonInactive.removeAttribute('disabled', false);
-    newPlaceButton.classList.add(configValidation.inactiveButtonClass)
-    newPlaceButton.setAttribute('disabled', false)
-  }
+    toggleButtonState(inputList, buttonElement, configValidation.inactiveButtonClass);
+
+    inputList.forEach((inputElement) => {
+      hideInputError(formElement, inputElement, configValidation.inputErrorClass, configValidation.errorClass);
+      inputElement.setCustomValidity('');
+      inputElement.classList.remove(configValidation.inputErrorClass);
+    });
+  };

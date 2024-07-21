@@ -107,14 +107,52 @@
     </div>
   </div>
 </div>
+<div class="popup popup_type_avatar">
+  <div class="popup__content popup_content_avatar">
+    <button
+    type="button"
+    class="popup__close">
+  </button>
+  <h3 class="popup__title">Обновить аватар</h3>
+  <form 
+  class="popup__form"
+  id="popup-form-avatar"
+  name="edit-avatar"
+  novalidate>
+  <input 
+  type="url"
+  name="link"
+  class="popup__input popup__input_type_url"
+  placeholder="Ссылка на фотографию"
+  id="link-input"
+  required>
+  <span class="form__input-error link-input-error"></span>
+  <button type="submit" class="button popup__button">Сохранить</button>
+</form>
+  </div>
+</div>
+<div class="popup popup_type_alert">
+  <div class="popup__content popup_content_alert">
+    <button
+      type="button"
+      class="popup__close">
+    </button>
+    <h3 class="popup__title">Вы уверены?</h3>
+    <button type="submit" class="button popup__button popup__button-alert">
+      Да
+    </button>
+  </div>
+</div>
 <template id="card-template">
   <li class="places__item card">
     <img class="card__image" src="" alt="" />
     <button type="button" class="card__delete-button"></button>
     <div class="card__description">
-      <h2 class="card__title">
-      </h2>
+      <h2 class="card__title"></h2>
+      <div class="card__number-likes">
       <button type="button" class="card__like-button"></button>
+      <span class="card__counter-like"></span>
+      </div>
     </div>
   </li>
 </template>

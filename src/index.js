@@ -13,7 +13,7 @@ import {
 
 const cardsContainer = document.querySelector('.places__list');
 const cardTemplate = document.querySelector('#card-template').content;
-const newPlace = document.forms['new-place'];
+const newPlace = document.forms['new-place']; // форма добавления новой карточки
 const placeName = newPlace.querySelector('.popup__input_type_card-name');
 const placeLink = newPlace.querySelector('.popup__input_type_url');
 
@@ -21,13 +21,13 @@ const placeLink = newPlace.querySelector('.popup__input_type_url');
 const popups = document.querySelectorAll('.popup');
 
 // Находим элементы попапов на странице
-const popupProfile = document.querySelector('.popup_type_edit');
-const popupAddNewCard = document.querySelector('.popup_type_new-card');
-const popupImage = document.querySelector('.popup_type_image');
+const popupProfile = document.querySelector('.popup_type_edit');  // редактирование профиля
+const popupAddNewCard = document.querySelector('.popup_type_new-card'); // добавление новой карточки
+const popupImage = document.querySelector('.popup_type_image'); // модальное окно увеличенное изображение
 
 // Находим кнопки для открытия попапов
-const editButton = document.querySelector('.profile__edit-button');
-const addButton = document.querySelector('.profile__add-button');
+const editButton = document.querySelector('.profile__edit-button'); // кнопка открытия окна редактрвоания профиля
+const addButton = document.querySelector('.profile__add-button'); // кнопка открытия окна добавления карточки
 
 // Находим элементы внутри попапа изображения
 const popupImageImage = document.querySelector('.popup__image');
@@ -38,8 +38,8 @@ const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const profileAvatar = document.querySelector('.profile__image');
 
-const profileForm = document.forms['edit-profile'];
-const avatarForm = document.forms['edit-avatar'];
+const profileForm = document.forms['edit-profile']; // форма редактирования профиля
+const avatarForm = document.forms['edit-avatar']; //форма редактирования аватара
 
 const modalAvatar = document.querySelector('.popup_type_avatar');
 const nameInput = profileForm.querySelector('.popup__input_type_name');
@@ -63,6 +63,9 @@ const renderLoading = (isLoading, buttonElement) => {
 //Функция добавления новой карточки
 newPlace.addEventListener('submit', (evt) => {
   evt.preventDefault();
+  console.log(newPlace);
+  clearValidation(newPlace, configValidation);
+  console.log(newPlace);
   const buttonElement = evt.submitter;
   renderLoading(true, buttonElement);
   postAddNewCard({
@@ -112,6 +115,7 @@ const openImagePopup = (link, alt) => {
 profileForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const buttonElement = evt.submitter;
+  buttonElement.setAttribute('disabled', 'disabled');
   renderLoading(true, buttonElement);
   patchProfileForm({
     name: nameInput.value,
@@ -146,12 +150,19 @@ const updateAvatarForm = (evt) => {
 
 // Добавляем обработчик события для открытия попапа редактирования профиля
 editButton.addEventListener('click', () => {
+  clearValidation(profileForm, configValidation);
+  openPopup(popupProfile);
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
+});
+/*editButton.addEventListener('click', () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
   openPopup(popupProfile);
   clearValidation(profileForm, configValidation);
-});
+});*/
 
+// Добавляем обработчик события для открытия попапа редактирования новой карточки
 addButton.addEventListener('click', () => {
   newPlace.reset();
   openPopup(popupAddNewCard);

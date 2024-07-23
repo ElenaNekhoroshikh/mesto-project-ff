@@ -1,5 +1,5 @@
 import './pages/index.css'; // импорт главного файла стилей
-import { createCard } from './components/card.js';
+import { createCard, addLike } from './components/card.js';
 import { openPopup, closePopup } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import {
@@ -9,13 +9,11 @@ import {
   postAddNewCard,
   handleDeleteCard,
   updateAvatar,
-  handleCardLike,
-  deleteLikeCard,
 } from './components/api.js';
 
 const cardsContainer = document.querySelector('.places__list');
-export const cardTemplate = document.querySelector('#card-template').content;
-export const newPlace = document.forms['new-place'];
+const cardTemplate = document.querySelector('#card-template').content;
+const newPlace = document.forms['new-place'];
 const placeName = newPlace.querySelector('.popup__input_type_card-name');
 const placeLink = newPlace.querySelector('.popup__input_type_url');
 
@@ -56,7 +54,7 @@ const renderLoading = (isLoading, buttonElement) => {
   if (isLoading) {
     buttonElement.textContent = 'Сохранение...';
   } else {
-    buttonElement.textContent = 'Сохранение...';
+    buttonElement.textContent = 'Сохранить';
     buttonElement.classList.add(configValidation.inactiveButtonClass);
     buttonElement.setAttribute('disabled', true);
   }
@@ -72,7 +70,7 @@ newPlace.addEventListener('submit', (evt) => {
     link: placeLink.value,
   }).then((dataCard) => {
     const cardElement = createCard({
-      userId, dataCard, deleteCard, addLike, openImagePopup,
+      cardTemplate, userId, dataCard, deleteCard, addLike, openImagePopup,
     });
     cardsContainer.prepend(cardElement);
     newPlace.reset();
@@ -83,27 +81,6 @@ newPlace.addEventListener('submit', (evt) => {
     renderLoading(false, buttonElement);
   });
 });
-
-// Функция лайка
-const addLike = (evt, cardId, countLikes) => {
-  if (evt.target.classList.contains('card__like-button_is-active')) {
-    deleteLikeCard(cardId)
-    .then((updateCard) => {
-      evt.target.classList.remove('card__like-button_is-active');
-      countLikes.textContent = updateCard.likes.length;
-    }).catch((err) => {
-      console.log('Ошибка удаления лайка:', err);
-    });
-  } else {
-    handleCardLike(cardId)
-    .then((updateCard) => {
-      evt.target.classList.add('card__like-button_is-active');
-      countLikes.textContent = updateCard.likes.length;
-    }).catch((err) => {
-      console.log('Ошибка добавления лайка:', err);
-    });
-  }
-};
 
 // Функция удаления карточки
 const deleteCard = (cardId) => {
@@ -200,7 +177,7 @@ Promise.all([getInitialCards(), getUserInfoFromServer()])
 
     initialCards.forEach((dataCard) => {
       const cardElement = createCard({
-        userId, dataCard, deleteCard, addLike, openImagePopup,
+        cardTemplate, userId, dataCard, deleteCard, addLike, openImagePopup,
       });
       cardsContainer.append(cardElement);
     });

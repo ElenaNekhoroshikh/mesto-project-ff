@@ -1,8 +1,9 @@
-import { cardTemplate } from '../index.js';
-export { createCard };
+import { handleCardLike, deleteLikeCard } from './api.js';
+export { createCard, addLike };
 
 // @todo: Функция создания карточки
 const createCard = ({
+  cardTemplate,
   userId, 
   dataCard, 
   deleteCard, 
@@ -43,4 +44,25 @@ const createCard = ({
   });
 
 return cardElement;
+};
+
+// Функция лайка
+const addLike = (evt, cardId, countLikes) => {
+  if (evt.target.classList.contains('card__like-button_is-active')) {
+    deleteLikeCard(cardId)
+    .then((updateCard) => {
+      evt.target.classList.remove('card__like-button_is-active');
+      countLikes.textContent = updateCard.likes.length;
+    }).catch((err) => {
+      console.log('Ошибка удаления лайка:', err);
+    });
+  } else {
+    handleCardLike(cardId)
+    .then((updateCard) => {
+      evt.target.classList.add('card__like-button_is-active');
+      countLikes.textContent = updateCard.likes.length;
+    }).catch((err) => {
+      console.log('Ошибка добавления лайка:', err);
+    });
+  }
 };

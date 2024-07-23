@@ -1,3 +1,12 @@
+export { getUserInfoFromServer, 
+    getInitialCards, 
+    patchProfileForm, 
+    updateAvatar, 
+    postAddNewCard, 
+    handleDeleteCard, 
+    handleCardLike, 
+    deleteLikeCard };
+
 const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1/wff-cohort-18',
     headers: {
@@ -15,21 +24,21 @@ const handlerResult = (res) => {
 
 
 // GET-запрос информации о пользователе
-export const getUserInfoFromServer = () => {           
+const getUserInfoFromServer = () => {           
     return  fetch(`${config.baseUrl}/users/me`, {
         headers: config.headers,
     }).then(handlerResult);
 };
 
 // Загрузка карточек с сервера
-export const getInitialCards = () => {          
+ const getInitialCards = () => {          
     return  fetch(`${config.baseUrl}/cards`, {
         headers: config.headers,
     }).then(handlerResult);
 };
 
 // Редактирование профиля
-export const patchProfileForm = (userInfo) => {
+const patchProfileForm = (userInfo) => {
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
@@ -41,7 +50,7 @@ export const patchProfileForm = (userInfo) => {
 };
 
 // Запрос обновления аватара
-export const updateAvatar = (link) => {
+const updateAvatar = (link) => {
     return fetch(`${config.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: config.headers,
@@ -53,7 +62,7 @@ export const updateAvatar = (link) => {
 
 // Добавление новой карточки
 
-export const postAddNewCard = (dataCard) => {
+const postAddNewCard = (dataCard) => {
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
@@ -65,7 +74,7 @@ export const postAddNewCard = (dataCard) => {
 };
 
 // удаление карточки
-export const handleDeleteCard = (cardId) => {
+const handleDeleteCard = (cardId) => {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers: config.headers,
@@ -74,7 +83,7 @@ export const handleDeleteCard = (cardId) => {
 
 // Добавление лайка
 
-export const handleCardLike = (cardId) => {
+const handleCardLike = (cardId) => {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: config.headers,
@@ -82,9 +91,9 @@ export const handleCardLike = (cardId) => {
 };
 
 // Запрос удаления лайка
-export const deleteLikeCard = (cardId) => {
+const deleteLikeCard = (cardId) => {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-        method: 'PUT',
+        method: 'DELETE',
         headers: config.headers,
     }).then(handlerResult);
 };

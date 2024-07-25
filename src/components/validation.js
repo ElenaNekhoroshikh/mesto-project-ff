@@ -94,6 +94,7 @@ const setEventListeners = (formElement, configValidation) => {
 
     inputList.forEach((inputElement) => {
       hideInputError(formElement, inputElement, configValidation);
+      inputElement.setCustomValidity("");
     });
     
     buttonElement.classList.add(configValidation.inactiveButtonClass);
